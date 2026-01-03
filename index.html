@@ -75,28 +75,39 @@
         <div class="date" id="date">SATURDAY, JANUARY 3</div>
     </div>
 
-    <script>
+<script>
         function updateWidget() {
             const now = new Date();
             
-            // Часы
+            // 1. Обновляем время
             const h = String(now.getHours()).padStart(2, '0');
             const m = String(now.getMinutes()).padStart(2, '0');
             document.getElementById('clock').innerText = `${h} : ${m}`;
 
-            // Дата
+            // 2. Обновляем дату
             const options = { weekday: 'long', month: 'long', day: 'numeric' };
             document.getElementById('date').innerText = now.toLocaleDateString('en-US', options).toUpperCase();
 
-            // Приветствие
+            // 3. Логика приветствия по часам
             const hour = now.getHours();
-            let greet = "GOOD EVENING";
-            if (hour < 12) greet = "GOOD MORNING";
-            else if (hour < 18) greet = "GOOD AFTERNOON";
+            let greet = "";
+
+            if (hour >= 5 && hour < 12) {
+                greet = "GOOD MORNING";   // с 5:00 до 11:59
+            } else if (hour >= 12 && hour < 18) {
+                greet = "GOOD AFTERNOON"; // с 12:00 до 17:59
+            } else if (hour >= 18 && hour < 23) {
+                greet = "GOOD EVENING";   // с 18:00 до 22:59
+            } else {
+                greet = "GOOD NIGHT";     // с 23:00 до 4:59
+            }
+
             document.getElementById('day-part').innerText = greet;
         }
 
+        // Запуск каждую секунду
         setInterval(updateWidget, 1000);
+        // Первый запуск мгновенно
         updateWidget();
     </script>
 </body>
