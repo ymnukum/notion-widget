@@ -1,0 +1,5 @@
+{
+  "name": "Minimalist Notion Greeting Widget",
+  "description": "A high-contrast, monochromatic greeting widget for Notion that updates based on the time of day, featuring smooth animations and a minimalist design.",
+  "requestFramePermissions": []
+}
