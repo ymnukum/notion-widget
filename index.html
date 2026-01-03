@@ -5,29 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saida's Greeting Widget</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&family=Playfair+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <style>
         body {
+            background-color: black; /* Поменяй на transparent, если в Notion белый фон */
+            color: white;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             overflow: hidden;
-            background-color: transparent;
+        }
+        .container {
+            text-align: center;
+            opacity: 0;
+            transform: translateX(-100px);
+            animation: slideLeft 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        @keyframes slideLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .greeting-text {
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            font-size: clamp(10px, 2vw, 14px);
+            color: #a1a1a1;
+            margin-bottom: 0.5rem;
+        }
+        .name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(40px, 8vw, 80px);
+            line-height: 1.1;
+            font-weight: 400;
+        }
+        .name i { font-style: italic; }
+        .time {
+            font-size: clamp(30px, 6vw, 60px);
+            font-weight: 200;
+            margin: 1.5rem 0;
+            letter-spacing: 0.1em;
+        }
+        .divider {
+            width: 100%;
+            max-width: 400px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #444, transparent);
+            margin: 1rem auto;
+        }
+        .date {
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: clamp(9px, 1.5vw, 12px);
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <div id="root"></div>
-    <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/"
-  }
-}
-</script>
+
+    <div class="container">
+        <div class="greeting-text" id="day-part">GOOD EVENING</div>
+        <div class="name">Greetings,<br><i>Saida</i></div>
+        <div class="time" id="clock">00 : 00</div>
+        <div class="divider"></div>
+        <div class="date" id="date">SATURDAY, JANUARY 3</div>
+    </div>
+
+    <script>
+        function updateWidget() {
+            const now = new Date();
+            
+            // Часы
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').innerText = `${h} : ${m}`;
+
+            // Дата
+            const options = { weekday: 'long', month: 'long', day: 'numeric' };
+            document.getElementById('date').innerText = now.toLocaleDateString('en-US', options).toUpperCase();
+
+            // Приветствие
+            const hour = now.getHours();
+            let greet = "GOOD EVENING";
+            if (hour < 12) greet = "GOOD MORNING";
+            else if (hour < 18) greet = "GOOD AFTERNOON";
+            document.getElementById('day-part').innerText = greet;
+        }
+
+        setInterval(updateWidget, 1000);
+        updateWidget();
+    </script>
 </body>
 </html>
